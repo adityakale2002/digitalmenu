@@ -1,17 +1,15 @@
 # Digital Menu
 
-A modern digital menu system for restaurants that enables customers to view and order food items through an interactive tablet interface. The system includes features such as calorie information, pricing, food photos, AR visualization, customizable serving sizes, and integrated payment requests.
+A modern, interactive digital menu system built with React and Three.js.
 
 ## Features
+- Interactive 3D menu visualization
+- Real-time menu updates
+- Responsive design
+- Admin dashboard for menu management
 
-- Interactive menu interface with detailed food information
-- Real-time order management
-- Dietary preferences and restrictions
-- Customizable cooking instructions
-- Add-on options for menu items
-- Digital payment request system
-- Beautiful and intuitive user interface
-- Responsive design for various tablet sizes
+## Live Demo
+Visit the live demo at: https://adityakale2002.github.io/digitalmenu
 
 ## Technologies Used
 
