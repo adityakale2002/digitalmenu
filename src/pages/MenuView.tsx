@@ -793,8 +793,12 @@ const MenuView: React.FC = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tableParam = urlParams.get('table');
+    console.log('URL search:', location.search);
+    console.log('Table param:', tableParam);
     if (tableParam) {
-      setTableNumber(parseInt(tableParam, 10));
+      const tableNum = parseInt(tableParam, 10);
+      console.log('Setting table number to:', tableNum);
+      setTableNumber(tableNum);
       localStorage.setItem('selectedTable', tableParam);
     }
   }, [location.search]);
@@ -1299,6 +1303,25 @@ const MenuView: React.FC = () => {
             Kalamboli, Navi Mumbai
           </Typography>
         </Box>
+        {/* Table Number Display */}
+        {tableNumber && (
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 0.5,
+            bgcolor: '#E23744',
+            color: 'white',
+            px: 1.5,
+            py: 0.5,
+            borderRadius: 2,
+            fontWeight: 'bold'
+          }}>
+            <RestaurantIcon sx={{ fontSize: '1rem' }} />
+            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+              Table {tableNumber}
+            </Typography>
+          </Box>
+        )}
         <Box sx={{ 
           display: 'flex', 
           alignItems: 'center', 
