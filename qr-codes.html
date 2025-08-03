@@ -64,10 +64,11 @@
     </div>
 
     <script>
-        const baseUrl = 'http://192.168.1.34:3000';
+        const baseUrl = 'https://adityakale2002.github.io/digitalmenu';
         const tables = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
         function generateQRCode(tableNumber) {
+            const tableUrl = `${baseUrl}/table/${tableNumber}`;
             const container = document.getElementById('qrContainer');
             const card = document.createElement('div');
             card.className = 'table-card';
@@ -77,15 +78,15 @@
                 <div class="qr-code" id="qr-${tableNumber}"></div>
                 <div class="instructions">
                     📱 Scan with your phone camera<br>
-                    🌐 Connect to Hotel WiFi first
+                    🌐 Use your mobile data
                 </div>
-                <div class="url">${baseUrl}</div>
+                <div class="url">${tableUrl}</div>
             `;
             
             container.appendChild(card);
             
             // Generate QR code
-            QRCode.toCanvas(document.getElementById(`qr-${tableNumber}`), baseUrl, {
+            QRCode.toCanvas(document.getElementById(`qr-${tableNumber}`), tableUrl, {
                 width: 150,
                 margin: 2,
                 color: {
