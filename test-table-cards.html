@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Shivmal - Test Table Cards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .table-card {
+            width: 300px;
+            height: 200px;
+            background: linear-gradient(135deg, #E23744, #FF6B35);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px;
+            display: inline-block;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .table-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        .hotel-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .table-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .menu-text {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .link-text {
+            font-size: 12px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 8px;
+            word-break: break-all;
+        }
+        .instructions {
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+        .test-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #FFD700;
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏨 Hotel Shivmal - Test Table Cards (GitHub Pages)</h1>
+    <p>These are test cards using GitHub Pages URLs. Click any card to test the menu!</p>
+    
+    <!-- Table 1 -->
+    <div class="table-card" onclick="openTable(1)">
+        <div class="test-badge">TEST</div>
+        <div class="hotel-name">🏨 Hotel Shivmal</div>
+        <div class="table-number">Table 1</div>
+        <div class="menu-text">📱 Digital Menu</div>
+        <div class="link-text">adityakale2002.github.io/digitalmenu?table=1</div>
+        <div class="instructions">Click to test</div>
+    </div>
+
+    <!-- Table 2 -->
+    <div class="table-card" onclick="openTable(2)">
+        <div class="test-badge">TEST</div>
+        <div class="hotel-name">🏨 Hotel Shivmal</div>
+        <div class="table-number">Table 2</div>
+        <div class="menu-text">📱 Digital Menu</div>
+        <div class="link-text">adityakale2002.github.io/digitalmenu?table=2</div>
+        <div class="instructions">Click to test</div>
+    </div>
+
+    <!-- Table 3 -->
+    <div class="table-card" onclick="openTable(3)">
+        <div class="test-badge">TEST</div>
+        <div class="hotel-name">🏨 Hotel Shivmal</div>
+        <div class="table-number">Table 3</div>
+        <div class="menu-text">📱 Digital Menu</div>
+        <div class="link-text">adityakale2002.github.io/digitalmenu?table=3</div>
+        <div class="instructions">Click to test</div>
+    </div>
+
+    <!-- Table 4 -->
+    <div class="table-card" onclick="openTable(4)">
+        <div class="test-badge">TEST</div>
+        <div class="hotel-name">🏨 Hotel Shivmal</div>
+        <div class="table-number">Table 4</div>
+        <div class="menu-text">📱 Digital Menu</div>
+        <div class="link-text">adityakale2002.github.io/digitalmenu?table=4</div>
+        <div class="instructions">Click to test</div>
+    </div>
+
+    <!-- Table 5 -->
+    <div class="table-card" onclick="openTable(5)">
+        <div class="test-badge">TEST</div>
+        <div class="hotel-name">🏨 Hotel Shivmal</div>
+        <div class="table-number">Table 5</div>
+        <div class="menu-text">📱 Digital Menu</div>
+        <div class="link-text">adityakale2002.github.io/digitalmenu?table=5</div>
+        <div class="instructions">Click to test</div>
+    </div>
+
+    <script>
+        function openTable(tableNumber) {
+            const url = `https://adityakale2002.github.io/digitalmenu?table=${tableNumber}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html> 
