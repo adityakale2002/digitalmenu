@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Grid,
   Card,
@@ -16,7 +16,6 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 const TableView: React.FC = () => {
   const navigate = useNavigate();
-  const { tableNumber } = useParams();
   const theme = useTheme();
   const tables = Array.from({ length: 12 }, (_, i) => i + 1);
 

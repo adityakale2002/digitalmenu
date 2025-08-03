@@ -147,14 +147,6 @@ const App: React.FC = () => {
                 <Route path="cart" element={<CartView />} />
                 <Route path="order" element={<MenuView />} />
               </Route>
-              
-              {/* Table-specific Routes */}
-              <Route path="/table/:tableNumber" element={<MenuLayout />}>
-                <Route index element={<TableView />} />
-                <Route path="menu" element={<MenuView />} />
-                <Route path="cart" element={<CartView />} />
-                <Route path="order" element={<MenuView />} />
-              </Route>
             </Routes>
           </Router>
         </AdminAuthProvider>
