@@ -780,6 +780,16 @@ const MenuView: React.FC = () => {
   const [searchActive, setSearchActive] = useState(false);
   const location = useLocation();
 
+  // Auto-detect table number from URL parameter
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const tableParam = urlParams.get('table');
+    if (tableParam) {
+      setTableNumber(parseInt(tableParam, 10));
+      localStorage.setItem('selectedTable', tableParam);
+    }
+  }, [location.search]);
+
   const categories = [
     "All",
     "Featured",
