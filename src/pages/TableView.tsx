@@ -19,6 +19,20 @@ const TableView: React.FC = () => {
   const theme = useTheme();
   const tables = Array.from({ length: 12 }, (_, i) => i + 1);
 
+  // Check for table parameter in URL and auto-navigate
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tableFromUrl = urlParams.get('table');
+    if (tableFromUrl) {
+      const tableNum = parseInt(tableFromUrl, 10);
+      if (tableNum >= 1 && tableNum <= 10) {
+        console.log('Auto-navigating to menu with table:', tableNum);
+        localStorage.setItem('selectedTable', tableNum.toString());
+        navigate('/menu');
+      }
+    }
+  }, [navigate]);
+
   const handleTableSelect = (tableNumber: number) => {
     // In a real app, we would store the table number in context/state
     localStorage.setItem('selectedTable', tableNumber.toString());

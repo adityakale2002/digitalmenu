@@ -1,32 +1,8 @@
-const API_BASE_URL = 'http://localhost:4000/api';
-
-export interface OrderItem {
-    name: string;
-    quantity: number;
-    price: number;
-}
-
-export interface Order {
-    tableNumber: number;
-    items: OrderItem[];
-    totalAmount: number;
-    status: 'pending' | 'preparing' | 'ready' | 'served' | 'completed';
-    paymentStatus: 'pending' | 'paid';
-}
-
-export interface Bill {
-    orderId: string;
-    tableNumber: number;
-    items: OrderItem[];
-    subtotal: number;
-    tax: number;
-    totalAmount: number;
-    paymentMethod: 'cash' | 'card' | 'upi';
-    paymentStatus: 'pending' | 'paid';
-}
+// API configuration
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 // Order APIs
-export const createOrder = async (orderData: Omit<Order, 'status' | 'paymentStatus'>) => {
+export const createOrder = async (orderData: any): Promise<any> => {
     const response = await fetch(`${API_BASE_URL}/orders`, {
         method: 'POST',
         headers: {
@@ -34,27 +10,38 @@ export const createOrder = async (orderData: Omit<Order, 'status' | 'paymentStat
         },
         body: JSON.stringify(orderData),
     });
+
+    if (!response.ok) {
+        throw new Error('Failed to create order');
+    }
+
     return response.json();
 };
 
-export const getOrders = async () => {
+export const getOrders = async (): Promise<any[]> => {
     const response = await fetch(`${API_BASE_URL}/orders`);
+    
+    if (!response.ok) {
+        throw new Error('Failed to fetch orders');
+    }
+
     return response.json();
 };
 
-export const updateOrderStatus = async (orderId: string, status: Order['status']) => {
-    const response = await fetch(`${API_BASE_URL}/orders/${orderId}/status`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status }),
+export const updateOrderStatus = async (orderId: string, status: string): Promise<any> => {
+    const response = await fetch(`${API_BASE_URL}/orders/${orderId}/${status}`, {
+        method: 'POST',
     });
+
+    if (!response.ok) {
+        throw new Error(`Failed to update order status to ${status}`);
+    }
+
     return response.json();
 };
 
 // Bill APIs
-export const createBill = async (billData: Omit<Bill, 'paymentStatus'>) => {
+export const createBill = async (billData: any): Promise<any> => {
     const response = await fetch(`${API_BASE_URL}/bills`, {
         method: 'POST',
         headers: {
@@ -62,21 +49,36 @@ export const createBill = async (billData: Omit<Bill, 'paymentStatus'>) => {
         },
         body: JSON.stringify(billData),
     });
+
+    if (!response.ok) {
+        throw new Error('Failed to create bill');
+    }
+
     return response.json();
 };
 
-export const getBills = async () => {
+export const getBills = async (): Promise<any[]> => {
     const response = await fetch(`${API_BASE_URL}/bills`);
+    
+    if (!response.ok) {
+        throw new Error('Failed to fetch bills');
+    }
+
     return response.json();
 };
 
-export const updateBillPayment = async (billId: string, paymentStatus: Bill['paymentStatus']) => {
+export const updateBillPayment = async (billId: string, paymentStatus: string): Promise<any> => {
     const response = await fetch(`${API_BASE_URL}/bills/${billId}/payment`, {
-        method: 'PATCH',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ paymentStatus }),
     });
+
+    if (!response.ok) {
+        throw new Error('Failed to update bill payment status');
+    }
+
     return response.json();
 }; 

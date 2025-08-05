@@ -116,7 +116,7 @@ const CartView: React.FC = () => {
 
       // Create bill
       const billData = {
-        orderId: order._id,
+        orderId: order._id, // Use backend's _id field
         tableNumber: parseInt(tableNumber),
         items: cartItems.map(item => ({
           name: item.name,
@@ -124,12 +124,12 @@ const CartView: React.FC = () => {
           price: item.price
         })),
         subtotal: calculateTotal(),
-        tax: calculateTotal() * 0.1, // 10% tax
-        totalAmount: calculateTotal() * 1.1,
+        tax: 0, // Tax removed
+        totalAmount: calculateTotal(),
         paymentMethod: 'card'
       };
 
-      await createBill(billData);
+      await createBill(billData as any);
 
       // Clear cart and show success message
       setCartItems([]);

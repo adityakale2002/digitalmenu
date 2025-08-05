@@ -40,7 +40,8 @@ const billSchema = new mongoose.Schema({
     },
     tax: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     totalAmount: {
         type: Number,

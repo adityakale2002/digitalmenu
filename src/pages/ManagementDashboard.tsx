@@ -156,10 +156,10 @@ const ManagementDashboard = () => {
       setLoading(true);
       setError('');
       const [ordersRes, billRequestsRes, feedbackRes, billHistoryRes] = await Promise.all([
-        fetch('http://localhost:4000/api/orders'),
-        fetch('http://localhost:4000/api/bills/requests'),
-        fetch('http://localhost:4000/api/feedback'),
-        fetch('http://localhost:4000/api/bills')
+        fetch('http://192.168.1.124:4000/api/orders'),
+        fetch('http://192.168.1.124:4000/api/bills/requests'),
+        fetch('http://192.168.1.124:4000/api/feedback'),
+        fetch('http://192.168.1.124:4000/api/bills')
       ]);
 
       const [ordersData, billRequestsData, feedbackData, billHistoryData] = await Promise.all([
@@ -184,7 +184,7 @@ const ManagementDashboard = () => {
   const connectWebSocket = () => {
     if (ws.current?.readyState === WebSocket.OPEN) return;
 
-    ws.current = new WebSocket('ws://localhost:4000');
+    ws.current = new WebSocket('ws://192.168.1.124:4000');
 
     ws.current.onopen = () => {
       console.log('WebSocket Connected');
@@ -244,7 +244,7 @@ const ManagementDashboard = () => {
 
   const handleAcceptOrder = async (orderId: string) => {
     try {
-      await fetch(`http://localhost:4000/api/orders/${orderId}/accept`, {
+      await fetch(`http://192.168.1.124:4000/api/orders/${orderId}/accept`, {
         method: 'POST',
       });
       fetchData();
@@ -257,7 +257,7 @@ const ManagementDashboard = () => {
     try {
       setLoading(true);
       setError('');
-      const res = await fetch('http://localhost:4000/api/bills', {
+      const res = await fetch('http://192.168.1.124:4000/api/bills', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tableNumber })
@@ -291,7 +291,7 @@ const ManagementDashboard = () => {
     try {
       setLoading(true);
       setError('');
-      const res = await fetch(`http://localhost:4000/api/bills/${billId}/payment`, {
+      const res = await fetch(`http://192.168.1.124:4000/api/bills/${billId}/payment`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -322,7 +322,7 @@ const ManagementDashboard = () => {
 
   const handleDeleteOrder = async (orderId) => {
     try {
-      await fetch(`http://localhost:4000/api/orders/${orderId}/delete`, {
+      await fetch(`http://192.168.1.124:4000/api/orders/${orderId}/delete`, {
         method: 'DELETE',
       });
       fetchData();
@@ -333,7 +333,7 @@ const ManagementDashboard = () => {
 
   const handleCompleteOrder = async (orderId: string) => {
     try {
-      await fetch(`http://localhost:4000/api/orders/${orderId}/complete`, {
+      await fetch(`http://192.168.1.124:4000/api/orders/${orderId}/complete`, {
         method: 'POST',
       });
       fetchData();
@@ -344,7 +344,7 @@ const ManagementDashboard = () => {
 
   const handleCancelOrder = async (orderId: string) => {
     try {
-      await fetch(`http://localhost:4000/api/orders/${orderId}/cancel`, {
+      await fetch(`http://192.168.1.124:4000/api/orders/${orderId}/cancel`, {
         method: 'POST',
       });
       fetchData();
@@ -684,7 +684,6 @@ const ManagementDashboard = () => {
         `${item.quantity}x ${item.name}${item.size ? ` (${item.size})` : ''}${item.addOns ? ` with ${item.addOns.join(', ')}` : ''}`
       ).join(', '),
       'Subtotal': `₹${bill.subtotal}`,
-      'Tax': `₹${bill.tax}`,
       'Total Amount': `₹${bill.totalAmount}`
     }));
 
@@ -894,7 +893,7 @@ const ManagementDashboard = () => {
         <Alert severity="info">No bill requests</Alert>
       ) : (
         <Stack spacing={3}>
-          {filterBills(billRequests).map((request) => (
+          {filterBills(billRequests as any).map((request: any) => (
             <Card key={`table${request.tableNumber}`} sx={{ boxShadow: 4 }}>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
@@ -1070,9 +1069,6 @@ const ManagementDashboard = () => {
                     <Typography variant="body2" sx={{ color: '#888' }}>
                       Subtotal: ₹{bill.subtotal}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: '#888' }}>
-                      Tax: ₹{bill.tax}
-                    </Typography>
                     <Typography variant="h6" sx={{ fontWeight: 700, color: '#2C7D89', mt: 1 }}>
                       Total: ₹{bill.totalAmount}
                     </Typography>
@@ -1142,7 +1138,7 @@ const ManagementDashboard = () => {
             </TableHead>
             <TableBody>
               {filterFeedback(feedback).map(fb => (
-                <TableRow key={fb.id || fb._id || `feedback-${fb.submittedAt}`}>
+                <TableRow key={fb.id || (fb as any)._id || `feedback-${fb.submittedAt}`}>
                   <TableCell>{fb.name || '-'}</TableCell>
                   <TableCell>{fb.phone || '-'}</TableCell>
                   <TableCell>{fb.email || '-'}</TableCell>

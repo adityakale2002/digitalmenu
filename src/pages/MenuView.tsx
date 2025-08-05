@@ -716,7 +716,7 @@ const sampleMenuItems: MenuItemType[] = [
 
 const heroSlides = [
   {
-    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=2000&q=80"
+    image: "/hotel.jpg"
   },
   {
     image: "https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&w=2000&q=80"
@@ -789,24 +789,42 @@ const MenuView: React.FC = () => {
   const [searchActive, setSearchActive] = useState(false);
   const location = useLocation();
 
-  // Auto-detect table number from URL parameter
+  // Debug table number state
+  console.log('Current tableNumber state:', tableNumber);
+
+  // Read table number from URL parameters
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const tableParam = urlParams.get('table');
-    console.log('URL search:', location.search);
-    console.log('Table param:', tableParam);
-    if (tableParam) {
-      const tableNum = parseInt(tableParam, 10);
-      console.log('Setting table number to:', tableNum);
-      setTableNumber(tableNum);
-      localStorage.setItem('selectedTable', tableParam);
+    // Read from URL first
+    const urlParams = new URLSearchParams(window.location.search);
+    const tableFromUrl = urlParams.get('table');
+    console.log('URL table parameter:', tableFromUrl);
+    
+    if (tableFromUrl) {
+      const tableNum = parseInt(tableFromUrl, 10);
+      console.log('Parsed table number:', tableNum);
+      if (tableNum >= 1 && tableNum <= 10) {
+        console.log('Setting table number to:', tableNum);
+        setTableNumber(tableNum);
+        localStorage.setItem('selectedTable', tableNum.toString());
+        return; // Exit early if we found a valid table in URL
+      }
+    }
+    
+    // Fallback to localStorage if no valid URL parameter
+    const stored = localStorage.getItem('selectedTable');
+    if (stored) {
+      const storedNum = parseInt(stored, 10);
+      if (storedNum >= 1 && storedNum <= 10) {
+        console.log('Using stored table number:', storedNum);
+        setTableNumber(storedNum);
+      }
     }
   }, [location.search]);
 
   // Get unique categories from menu items
   const availableCategories = Array.from(new Set(safeMenuItems.map(item => item.category)));
   console.log('Available categories:', availableCategories);
-  
+
   const categories = [
     "All",
     "Featured",
@@ -969,26 +987,57 @@ const MenuView: React.FC = () => {
 
   const handleRequestBill = async () => {
     try {
+      console.log('Request Bill clicked for table:', tableNumber);
+      
       if (!tableNumber) {
         alert('Please select a table number first!');
         return;
       }
 
+      console.log('Fetching orders for table:', tableNumber);
+
       // Get all orders for this table
-      const response = await fetch(`http://localhost:4000/api/orders?tableNumber=${tableNumber}`);
+                const response = await fetch(`http://192.168.1.124:4000/api/orders?tableNumber=${tableNumber}`);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Failed to fetch orders:', response.status, errorText);
+        throw new Error(`Failed to fetch orders: ${response.status}`);
+      }
+      
       const orders = await response.json();
+      console.log('Orders fetched:', orders);
+
+      if (orders.length === 0) {
+        alert('No orders found for this table. Please place an order first.');
+        return;
+      }
+
+      console.log('Updating orders to mark as bill requested...');
 
       // Update all orders to mark them as bill requested
-      await Promise.all(orders.map(order => 
-        fetch(`http://localhost:4000/api/orders/${order._id}/status`, {
+      const updatePromises = orders.map(async (order) => {
+        console.log('Updating order:', order._id);
+                     const updateResponse = await fetch(`http://192.168.1.124:4000/api/orders/${order._id}/status`, {
           method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
             status: order.status,
             billRequested: true 
           })
-        })
-      ));
+        });
+        
+        if (!updateResponse.ok) {
+          const errorText = await updateResponse.text();
+          console.error('Failed to update order:', order._id, updateResponse.status, errorText);
+          throw new Error(`Failed to update order: ${updateResponse.status}`);
+        }
+        
+        return updateResponse.json();
+      });
+      
+      await Promise.all(updatePromises);
+      console.log('All orders updated successfully');
       
       // Close bill dialog and open feedback form
       setBillDialogOpen(false);
@@ -996,9 +1045,11 @@ const MenuView: React.FC = () => {
       
       // Clear order history after requesting bill
       setOrderHistory([]);
+      
+      alert('Bill requested successfully! Please wait for staff to process.');
     } catch (error) {
       console.error('Error requesting bill:', error);
-      alert('Failed to request bill. Please try again.');
+      alert(`Failed to request bill: ${error.message}`);
     }
   };
 
@@ -1035,7 +1086,7 @@ const MenuView: React.FC = () => {
     try {
       // Send feedback data to backend if any field is filled
       if (feedbackData.name || feedbackData.phone || feedbackData.email || feedbackData.message) {
-        await fetch('http://localhost:4000/api/feedback', {
+        await fetch('http://192.168.1.124:4000/api/feedback', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -1067,16 +1118,7 @@ const MenuView: React.FC = () => {
       )
     : getCategoryItems();
 
-  // Read table number from URL query parameter
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const tableParam = params.get('table');
-    if (tableParam) {
-      const tableNum = parseInt(tableParam, 10);
-      setTableNumber(tableNum);
-      localStorage.setItem('selectedTable', String(tableNum));
-    }
-  }, [location.search]);
+
 
   return (
     <Box sx={{ width: '100%', overflow: 'hidden', bgcolor: '#f8f8f8', minHeight: '100vh' }}>
@@ -1303,25 +1345,6 @@ const MenuView: React.FC = () => {
             Kalamboli, Navi Mumbai
           </Typography>
         </Box>
-        {/* Table Number Display */}
-        {tableNumber && (
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: 0.5,
-            bgcolor: '#E23744',
-            color: 'white',
-            px: 1.5,
-            py: 0.5,
-            borderRadius: 2,
-            fontWeight: 'bold'
-          }}>
-            <RestaurantIcon sx={{ fontSize: '1rem' }} />
-            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              Table {tableNumber}
-            </Typography>
-          </Box>
-        )}
         <Box sx={{ 
           display: 'flex', 
           alignItems: 'center', 
@@ -1446,7 +1469,7 @@ const MenuView: React.FC = () => {
                   </Box>
 
 
-      
+
       {/* Menu Items */}
       {searchQuery.trim() ? (
         <Box sx={{ px: 1, py: 1 }}>
@@ -1886,22 +1909,22 @@ const MenuView: React.FC = () => {
 
                 {/* Size Selection for Handi Specials and Tandoori */}
                 {(selectedItem.category === "Handi Specials" || selectedItem.name === "Tandoori") && (
-                  <Box sx={{ px: 2, pt: 1, pb: 2, bgcolor: '#fafbfc', borderRadius: 3, mb: 2 }}>
+                <Box sx={{ px: 2, pt: 1, pb: 2, bgcolor: '#fafbfc', borderRadius: 3, mb: 2 }}>
                     <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Size</Typography>
-                    <Typography variant="caption" sx={{ color: '#888', mb: 1, display: 'block' }}>Required • Select any 1 option</Typography>
-                    <Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                        <Radio checked={selectedSize === 'Half'} onChange={() => setSelectedSize('Half')} sx={{ color: '#E23744', p: 0.5, mr: 1 }} />
-                        <Typography variant="body2" sx={{ flex: 1 }}>Half</Typography>
-                        <Typography variant="body2" sx={{ fontWeight: 700 }}>₹{selectedItem.price}</Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Radio checked={selectedSize === 'Full'} onChange={() => setSelectedSize('Full')} sx={{ color: '#E23744', p: 0.5, mr: 1 }} />
-                        <Typography variant="body2" sx={{ flex: 1 }}>Full</Typography>
+                  <Typography variant="caption" sx={{ color: '#888', mb: 1, display: 'block' }}>Required • Select any 1 option</Typography>
+                  <Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                      <Radio checked={selectedSize === 'Half'} onChange={() => setSelectedSize('Half')} sx={{ color: '#E23744', p: 0.5, mr: 1 }} />
+                      <Typography variant="body2" sx={{ flex: 1 }}>Half</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 700 }}>₹{selectedItem.price}</Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Radio checked={selectedSize === 'Full'} onChange={() => setSelectedSize('Full')} sx={{ color: '#E23744', p: 0.5, mr: 1 }} />
+                      <Typography variant="body2" sx={{ flex: 1 }}>Full</Typography>
                         <Typography variant="body2" sx={{ fontWeight: 700 }}>₹{selectedItem.name === "Butter Chicken Handi" ? 600 : selectedItem.name === "Chicken Handi" ? 650 : selectedItem.name === "Aalani Handi (Chicken)" ? 650 : selectedItem.name === "Butter Mutton Handi" ? 949 : selectedItem.name === "Mutton Handi" ? 900 : selectedItem.name === "Aalani Handi (Mutton)" ? 900 : selectedItem.name === "Tandoori" ? 600 : selectedItem.price}</Typography>
-                      </Box>
                     </Box>
                   </Box>
+                </Box>
                 )}
 
                 {/* Cooking Request */}

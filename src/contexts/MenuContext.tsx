@@ -39,7 +39,7 @@ const initialMenuItems: MenuItem[] = [
     price: 320,
     calories: 1200,
     preparationTime: "25-30 min",
-    image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80",
+    image: "/special.jpg",
     servingSize: "Full Thali",
     dietaryTags: ["Non-Vegetarian", "Maharashtrian", "Spicy"],
     addOns: [
@@ -56,7 +56,7 @@ const initialMenuItems: MenuItem[] = [
     price: 420,
     calories: 1400,
     preparationTime: "30-35 min",
-    image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80",
+    image: "/kalapandhra.jpg",
     servingSize: "Full Thali",
     dietaryTags: ["Non-Vegetarian", "Maharashtrian", "Spicy"],
     addOns: [

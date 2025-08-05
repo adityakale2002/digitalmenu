@@ -20,7 +20,14 @@ router.post('/', async (req, res) => {
 // Get all orders
 router.get('/', async (req, res) => {
     try {
-        const orders = await Order.find().sort({ orderTime: -1 });
+        const { tableNumber } = req.query;
+        let query = {};
+        
+        if (tableNumber) {
+            query.tableNumber = parseInt(tableNumber);
+        }
+        
+        const orders = await Order.find(query).sort({ orderTime: -1 });
         res.json(orders);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -158,6 +165,19 @@ router.patch('/:id/payment', async (req, res) => {
         res.json(updatedOrder);
     } catch (error) {
         res.status(400).json({ message: error.message });
+    }
+});
+
+// Delete all orders (cleanup endpoint)
+router.delete('/cleanup/all', async (req, res) => {
+    try {
+        const result = await Order.deleteMany({});
+        res.json({ 
+            message: `Deleted ${result.deletedCount} orders successfully`,
+            deletedCount: result.deletedCount
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 

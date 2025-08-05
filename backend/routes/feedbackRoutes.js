@@ -50,4 +50,17 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// Delete all feedback (cleanup endpoint)
+router.delete('/cleanup/all', async (req, res) => {
+    try {
+        const result = await Feedback.deleteMany({});
+        res.json({ 
+            message: `Deleted ${result.deletedCount} feedback entries successfully`,
+            deletedCount: result.deletedCount
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = router; 

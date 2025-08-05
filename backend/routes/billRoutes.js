@@ -57,8 +57,8 @@ router.post('/', async (req, res) => {
         // Calculate totals
         const items = orders.flatMap(order => order.items);
         const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const tax = subtotal * 0.18; // 18% tax
-        const totalAmount = subtotal + tax;
+        const tax = 0; // Tax removed
+        const totalAmount = subtotal;
 
         // Create the bill
         const bill = new Bill({
@@ -148,6 +148,19 @@ router.get('/date-range', async (req, res) => {
     } catch (error) {
         console.error('Error fetching bills by date range:', error);
         res.status(500).json({ message: 'Error fetching bills by date range' });
+    }
+});
+
+// Delete all bills (cleanup endpoint)
+router.delete('/cleanup/all', async (req, res) => {
+    try {
+        const result = await Bill.deleteMany({});
+        res.json({ 
+            message: `Deleted ${result.deletedCount} bills successfully`,
+            deletedCount: result.deletedCount
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
