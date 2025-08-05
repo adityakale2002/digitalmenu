@@ -21,8 +21,23 @@ const TableView: React.FC = () => {
 
   // Check for table parameter in URL and auto-navigate
   React.useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tableFromUrl = urlParams.get('table');
+    // Handle both hash routing and regular routing
+    const hash = window.location.hash;
+    const search = window.location.search;
+    
+    let tableFromUrl = null;
+    
+    // Check hash routing first (e.g., /#/?table=1)
+    if (hash.includes('?table=')) {
+      const urlParams = new URLSearchParams(hash.split('?')[1]);
+      tableFromUrl = urlParams.get('table');
+    }
+    // Check regular routing (e.g., ?table=1)
+    else if (search.includes('table=')) {
+      const urlParams = new URLSearchParams(search);
+      tableFromUrl = urlParams.get('table');
+    }
+    
     if (tableFromUrl) {
       const tableNum = parseInt(tableFromUrl, 10);
       if (tableNum >= 1 && tableNum <= 10) {

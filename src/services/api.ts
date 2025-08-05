@@ -1,5 +1,5 @@
 // API configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://hotel-backend-ijli.onrender.com/api';
 
 // Order APIs
 export const createOrder = async (orderData: any): Promise<any> => {
