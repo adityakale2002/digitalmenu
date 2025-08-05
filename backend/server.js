@@ -1,17 +1,16 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const http = require('http');
 const WebSocket = require('ws');
-const connectDB = require('./config/db');
+const db = require('./simple-db');
 require('dotenv').config();
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// Connect to MongoDB
-connectDB();
+// Initialize simple database
+console.log('✅ Using simple JSON database');
 
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
@@ -87,16 +86,66 @@ const broadcast = (data) => {
 // Make broadcast available to routes
 app.set('broadcast', broadcast);
 
-// Update your route handlers to broadcast changes
-// For example, in your order routes:
+// Simple order creation endpoint
 app.post('/api/orders', async (req, res) => {
   try {
-    const order = new Order(req.body);
-    await order.save();
+    const order = db.createOrder(req.body);
     broadcast({ type: 'NEW_ORDER', data: order });
     res.status(201).json(order);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+});
+
+// Get all orders
+app.get('/api/orders', async (req, res) => {
+  try {
+    const orders = db.getOrders();
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Simple bill creation endpoint
+app.post('/api/bills', async (req, res) => {
+  try {
+    const bill = db.createBill(req.body);
+    broadcast({ type: 'NEW_BILL', data: bill });
+    res.status(201).json(bill);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Get all bills
+app.get('/api/bills', async (req, res) => {
+  try {
+    const bills = db.getBills();
+    res.json(bills);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Simple feedback creation endpoint
+app.post('/api/feedback', async (req, res) => {
+  try {
+    const feedback = db.createFeedback(req.body);
+    broadcast({ type: 'NEW_FEEDBACK', data: feedback });
+    res.status(201).json(feedback);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Get all feedback
+app.get('/api/feedback', async (req, res) => {
+  try {
+    const feedback = db.getFeedback();
+    res.json(feedback);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 

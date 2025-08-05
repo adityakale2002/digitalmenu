@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Shivmal - Digital Menu</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        .table-btn {
+            background: linear-gradient(45deg, #FF4B2B, #FF7F5C);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .table-btn:hover {
+            transform: translateY(-2px);
+        }
+        .admin-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+        .admin-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 10px;
+        }
+        .admin-btn:hover {
+            background: #555;
+        }
+        .info {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏨 Hotel Shivmal</h1>
+        <p style="color: #666; font-size: 1.1em; margin-bottom: 30px;">
+            Welcome to our Digital Menu System
+        </p>
+        
+        <h3>Select Your Table:</h3>
+        <div class="table-grid">
+            <button class="table-btn" onclick="window.location.href='/?table=1'">Table 1</button>
+            <button class="table-btn" onclick="window.location.href='/?table=2'">Table 2</button>
+            <button class="table-btn" onclick="window.location.href='/?table=3'">Table 3</button>
+            <button class="table-btn" onclick="window.location.href='/?table=4'">Table 4</button>
+            <button class="table-btn" onclick="window.location.href='/?table=5'">Table 5</button>
+            <button class="table-btn" onclick="window.location.href='/?table=6'">Table 6</button>
+            <button class="table-btn" onclick="window.location.href='/?table=7'">Table 7</button>
+            <button class="table-btn" onclick="window.location.href='/?table=8'">Table 8</button>
+            <button class="table-btn" onclick="window.location.href='/?table=9'">Table 9</button>
+            <button class="table-btn" onclick="window.location.href='/?table=10'">Table 10</button>
+        </div>
+        
+        <div class="admin-section">
+            <h3>🏢 Management Access</h3>
+            <button class="admin-btn" onclick="window.location.href='/admin/login'">Admin Login</button>
+            <button class="admin-btn" onclick="window.location.href='/management'">Management Dashboard</button>
+        </div>
+        
+        <div class="info">
+            <p>📱 Scan QR code or click table number to access digital menu</p>
+            <p>👨‍💼 Staff can access management panel for orders and billing</p>
+        </div>
+    </div>
+</body>
+</html> 

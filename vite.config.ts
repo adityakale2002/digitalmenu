@@ -11,4 +11,7 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
   },
+  define: {
+    'import.meta.env': JSON.stringify(process.env),
+  },
 }); 

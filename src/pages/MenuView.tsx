@@ -63,7 +63,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import { useLocation } from 'react-router-dom';
-import { createOrder, createBill, Bill } from '../services/api';
+import { createOrder, createBill } from '../services/api';
 
 interface NutritionalInfo {
   proteins: number;

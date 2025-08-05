@@ -135,7 +135,7 @@ const ManagementDashboard = () => {
     severity: 'success'
   });
   const ws = useRef<WebSocket | null>(null);
-  const reconnectTimeout = useRef<NodeJS.Timeout>();
+  const reconnectTimeout = useRef<ReturnType<typeof setTimeout>>();
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
     selectedTable: null,
